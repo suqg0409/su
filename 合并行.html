@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <table id="table"></table>
+</body>
+<script>
+    var table = $("#table");
+
+    // 初始化表格
+    table.bootstrapTable({
+        url: $.fn.bootstrapTable.defaults.extend.index_url,
+        pk: 'id',
+        sortName: 'update_time',
+        search: false,
+        toolbar: '#toolbar',
+        commonSearch: true,
+        pageSize: 12,
+        searchFormVisible: true,
+        queryParams: function (params) {
+            //这里可以追加搜索条件
+            var filter = JSON.parse(params.filter);
+            var op = JSON.parse(params.op);
+            //这里可以动态赋值，比如从URL中获取admin_id的值，filter.admin_id=Fast.api.query('admin_id');
+            // filter.admin_id = 1;
+            if (filter.is_bujiao == '是')
+                filter.is_bujiao = 1
+            if (filter.is_bujiao == '否')
+                filter.is_bujiao = 0
+            op.username = "like";
+            params.filter = JSON.stringify(filter);
+            params.op = JSON.stringify(op);
+            return params;
+        },
+        columns: [
+            [{
+                field: 'total_order_id',
+                title: '总订单号',
+                sortable: true,
+                width: "150px",
+                formatter: Table.api.formatter.search
+            }]
+        ],
+
+        onLoadSuccess: function (data) {
+            mergeCells(data, "total_order_id", $("#table"));
+        },
+    });
+
+    // 为表格绑定事件
+    Table.api.bindevent(table);
+
+
+    /**
+     * 合并相同行
+     * @param data  原始数据（在服务端完成排序）
+     * @param fieldName 合并属性数组
+     * @param target    目标表格对象
+     */
+    function mergeCells(data, fieldName, target) {
+        setTimeout(function () {
+            if (data.rows.length == 0) {
+                return;
+            }
+            var numArr = [];
+            var number = 0;
+            var classzhi = 'dan';
+            if (data.rows.length > 1) {
+                for (let i = 0; i < data.rows.length; i++) {
+                    if (data.rows[i][fieldName] != '' && data.rows[i][fieldName] != '-') {
+                        if (data.rows[i - 1]) {
+                            if (data.rows[i - 1][fieldName] != '' && data.rows[i - 1][fieldName] != '-') {
+                                if (data.rows[i - 1][fieldName] == data.rows[i][fieldName]) {
+                                    number++
+                                } else {
+                                    number = number + 1
+                                    numArr.push({
+                                        index: i - number,
+                                        number: number,
+                                        pan: '1'
+                                    })
+                                    number = 0
+                                }
+                            }
+                        }
+                        if (!data.rows[i + 1]) {
+                            number = number
+                            numArr.push({
+                                index: i - number,
+                                number: number + 1,
+                                pan: '2'
+                            })
+                            number = 0
+                        } else {
+                            if (data.rows[i + 1][fieldName] == '' || data.rows[i + 1][fieldName] == '-') {
+                                number = number
+                                numArr.push({
+                                    index: i - number,
+                                    number: number + 1,
+                                    pan: '3'
+                                })
+                                number = 0
+                            }
+                        }
+                    } else {
+                        numArr.push({
+                            index: i,
+                            number: 1,
+                            pan: '4'
+                        })
+                    }
+                }
+            } else {
+                numArr.push({
+                    index: 0,
+                    number: 1,
+                    pan: '5'
+                })
+            }
+            // console.log(numArr);
+            for (let x = 0; x < numArr.length; x++) {
+                if (x % 2) {
+                    for (let y = 0; y < numArr[x]['number']; y++) {
+                        $(target).children('tbody').children('tr').eq(numArr[x]['index'] + y).css('background',
+                            '#ccc')
+                    }
+                } else {
+                    for (let y = 0; y < numArr[x]['number']; y++) {
+                        $(target).children('tbody').children('tr').eq(numArr[x]['index'] + y).css('background',
+                            '#FFF')
+                    }
+                }
+                $(target).bootstrapTable('mergeCells', {
+                    index: numArr[x]['index'],
+                    field: fieldName,
+                    colspan: 1,
+                    rowspan: numArr[x]['number']
+                });
+            }
+        }, 0)
+    }
+</script>
+
+</html>
+
+
+<!-- https://www.cnblogs.com/eleven258/p/9686731.html -->
+
+<!-- <%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2018/6/20
+  Time: 14:21
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String scheme = request.getScheme();
+    String serverName = request.getServerName();
+    String contextPath = request.getContextPath();
+    int port = request.getServerPort();
+    //网站的访问跟路径
+    String baseURL = scheme + "://" + serverName + ":" + port
+            + contextPath;
+    request.setAttribute("baseURL", baseURL);
+%> -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%--设置IE渲染方式(文档)默认为最高(这部分可以选择添加也可以不添加)--%>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>实现表格同名合并</title>
+    <!--图标样式-->
+    <link rel="stylesheet" type="text/css" href="${baseURL}/Bootstrap/bootstrap/css/bootstrap.min.css" />
+    <link href="${baseURL}/Bootstrap/bootstrap-table/bootstrap-table.css" rel="stylesheet" />
+    <script src="${baseURL}/Bootstrap/bootstrap/assets/js/jquery-1.10.2.min.js"></script>
+    <script src="${baseURL}/Bootstrap/bootstrap/assets/js/bootstrap.min.js"></script>
+    <script src="${baseURL}/Bootstrap/bootstrap-table/bootstrap-table.js"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="${baseURL}/Bootstrap/bootstrap/assets/js/html5shiv.js"></script>
+    <script src="${baseURL}/Bootstrap/bootstrap/assets/js/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+
+    </style>
+
+</head>
+
+<body>
+    <div>
+        <table id="table"></table>
+    </div>
+</body>
+
+<script type="text/javascript">
+    $(function () {
+        //初始化Table
+        $('#table').bootstrapTable({
+            url: '${baseURL}/Views/cc.json', //请求后台的URL（*） 这里我用的是一个json文件
+            method: 'get', //请求方式（*）
+            toolbar: '#toolbar', //工具按钮用哪个容器
+            striped: true, //是否显示行间隔色
+            cache: false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true, //是否显示分页（*）
+            sortable: false, //是否启用排序
+            sortOrder: "asc", //排序方式
+            //queryParams: queryParams,//传递参数（*）
+            sidePagination: "server", //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1, //初始化加载第一页，默认第一页
+            pageSize: 10, //每页的记录行数（*）
+            pageList: [10, 25, 50, 100], //可供选择的每页的行数（*）
+            // search: true,//是否显示表格搜索，此搜索是客户端搜索，不会进服务端
+            contentType: "application/x-www-form-urlencoded",
+            strictSearch: true,
+            showColumns: true, //是否显示内容列下拉框
+            showRefresh: true, //是否显示刷新按钮
+            minimumCountColumns: 2, //最少允许的列数
+            clickToSelect: true, //是否启用点击选中行
+            //这里如果要固定表头的话 就把height开启
+            //height: 700,//行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            width: '50%',
+            uniqueId: "id", //每一行的唯一标识，一般为主键列
+            showToggle: true, //是否显示详细视图和列表视图的切换按钮
+            cardView: false, //是否显示详细视图
+            detailView: false, //是否显示父子表
+            onLoadSuccess: function (data) {
+                //数据加载成功后 进行合并  这里我只是同名合并projName subProj phase 如果需要合并更多的字段 仿照添加对应的代码就可以了
+                mergeTable(data, "table");
+            },
+            columns: [{
+                    field: 'projName',
+                    title: 'projName',
+                }, {
+                    field: 'subProj',
+                    title: 'subProj'
+                }, {
+                    field: 'phase',
+                    title: 'phase'
+                }, {
+                    field: 'workItem',
+                    title: 'workItem',
+                },
+                {
+                    field: 'completion',
+                    title: 'completion',
+                },
+            ],
+        });
+    });
+
+
+    //全局变量 ***如果每次只是发送ajax请求对table进行局部更新，则每次要合并前前都应该清空这三个变量 不然全局变量会一值追加结果
+    var projNameCount = "";
+    var subProjNameCount = "";
+    var phaseCount = "";
+
+    //合并表格
+    function mergeTable(data, tableId) {
+        //每次合并表格前 都要将全局变量清空
+        projNameCount = "";
+        subProjNameCount = "";
+        phaseCount = "";
+        mergeCells(data.rows, 0, data.rows.length, "projName", $('#' + tableId));
+        //对projName,subProjName,phase的次数进行分割
+        //去掉末尾的逗号 有时候也可以不用去掉 还是去掉了我这里
+        projNameCount = projNameCount.substring(0, projNameCount.length - 1);
+        subProjNameCount = subProjNameCount.substring(0, subProjNameCount.length - 1);
+        phaseCount = phaseCount.substring(0, phaseCount.length - 1);
+        //console.log(projNameCount+"+"+subProjNameCount+"+"+phaseCount);
+        var strArr1 = projNameCount.split(",");
+        var strArr2 = subProjNameCount.split(",");
+        var strArr3 = phaseCount.split(",");
+        //根据次数进行表格合并
+        //合并projName
+        var index = 0;
+        for (var i = 0; i < strArr1.length; i++) {
+            var count = strArr1[i] * 1;
+            $('#' + tableId).bootstrapTable('mergeCells', {
+                index: index,
+                field: "projName",
+                colspan: 1,
+                rowspan: count
+            });
+            index += count;
+        }
+        //合并subProjName
+        var index = 0;
+        for (var i = 0; i < strArr2.length; i++) {
+            var count = strArr2[i] * 1;
+            $('#' + tableId).bootstrapTable('mergeCells', {
+                index: index,
+                field: "subProjName",
+                colspan: 1,
+                rowspan: count
+            });
+            index += count;
+        }
+        //合并phaseName
+        var index = 0;
+        for (var i = 0; i < strArr3.length; i++) {
+            var count = strArr3[i] * 1;
+            $('#' + tableId).bootstrapTable('mergeCells', {
+                index: index,
+                field: "phaseName",
+                colspan: 1,
+                rowspan: count
+            });
+            index += count;
+        }
+    }
+
+
+    //排序后紧挨在一起 进行同名合并
+    /**
+     * 对于表格合并，首先要进行排序，即将同名的属性的记录排序紧挨在一起，这样才能最好的显示出合并想要的效果。
+     * 因为此方法是拿第一个数据与后面的数据依次比较，
+     * 例如，第一条记录的projName与第二条记录的projName来进行比较，两者相同，则继续第一条记录的projName与第三条记录的projName来进行比较，
+     * 当不相同时，记录下此projName对应的值出现的次数，然后再开始从第三条记录的projName与第四条记录的projName来进行比较，依次循环下去，记
+     * 录下相同内容的值出现的次数，到时候，再根据这些次数来进行合并
+     *
+     * 此方法主要是先拿到每个同名属性的值的相等次数，把次数利用全局变量存下来
+     *
+     * @param datas --表格数据,一般为表格的rows数据
+     * @param startIndex --开始下标
+     * @param size --从开始下标起，到size结束，遍历合并多少个
+     * @param fieldName --计算算哪个列
+     * @param target --table表格对象
+     */
+    function mergeCells(datas, startIndex, size, fieldName, target) {
+        //console.log("startIndex:"+startIndex+"size:"+size+"---合并列:"+fieldName)
+        //声明一个数组计算相同属性值在data对象出现的次数和
+        //这里不能使用map，因为如果涉及到排序后，相同的属性并不是紧挨在一起,那么后面的次数会覆盖前面的次数，故这里用数组
+        var sortArr = new Array();
+        for (var i = startIndex; i < size; i++) {
+            for (var j = i + 1; j < size; j++) {
+                if (datas[i][fieldName] != datas[j][fieldName]) {
+                    //相同属性值不同
+                    if (j - i > 1) {
+                        sortArr.push(j - i);
+                        i = j - 1;
+                        //如果是最后一个元素 把最后一个元素的次数也装进去
+                        if (i == size - 1 - 1) {
+                            sortArr.push(1);
+                        }
+                    } else {
+                        sortArr.push(j - i);
+                        //如果j是最后一个元素 把最后一个元素的次数装进去
+                        if (j == size - 1) {
+                            sortArr.push(1);
+                        }
+                    }
+                    break;
+
+                } else {
+                    //相同属性值相同 直到最后一次的时候才会装 否则在他们的值不同时再装进去
+                    if (j == size - 1) {
+                        sortArr.push(j - i + 1);
+                        //这里的赋值感觉有点多余 算了现就这个样子吧 不影响功能
+                        i = j;
+                    }
+                }
+            }
+        }
+
+        //遍历数组，将值装追加到对应的字符串后面
+        for (var prop in sortArr) {
+            /*这里在ie8上运行的时候 出现坑 最好遍历数组不要用for in 这里我用了就懒得换了
+            下面加上如果prop是indexOf就停止 就解决了ie8出现的问题*/
+            if (prop == "indexOf") {
+                continue;
+            }
+            if (fieldName == "projName") {
+                var count = sortArr[prop] * 1;
+                projNameCount += count + ",";
+            }
+
+            if (fieldName == "subProjName") {
+                var count = sortArr[prop] * 1;
+                subProjNameCount += count + ",";
+            }
+
+            if (fieldName == "phaseName") {
+                var count = sortArr[prop] * 1;
+                phaseCount += count + ",";
+            }
+        }
+
+        for (var prop in sortArr) {
+            if (prop == "indexOf") {
+                continue;
+            }
+            if (fieldName == "projName") {
+                //console.log("进入projName--此时开始index-"+startIndex+"--结束index--"+(startIndex+sortArr[prop])*1);
+                startIndex = 0;
+                //subProjName每次进去的startIndex为前面次数的和
+                if (subProjNameCount.length > 0) {
+                    //console.log("subProjNameCount-"+subProjNameCount);
+                    var temp = subProjNameCount.substring(0, subProjNameCount.length - 1);
+                    var strArr1 = temp.split(",");
+                    for (var i = 0; i < strArr1.length; i++) {
+                        var count = strArr1[i] * 1;
+                        startIndex += count;
+                    }
+                }
+
+                if (sortArr[prop] > 1) {
+                    mergeCells(datas, startIndex, startIndex + sortArr[prop], "subProjName", target);
+                } else {
+                    //当projName的次数为1就不进入循环
+                    subProjNameCount += 1 + ",";
+                    phaseCount += 1 + ",";
+                }
+            }
+            if (fieldName == "subProjName") {
+                startIndex = 0;
+                if (phaseCount.length > 0) {
+                    //console.log("phaseCount-"+phaseCount);
+                    var temp = phaseCount.substring(0, phaseCount.length - 1);
+                    //phaseCount = phaseCount + ",";
+                    var strArr1 = temp.split(",");
+                    for (var i = 0; i < strArr1.length; i++) {
+                        var count = strArr1[i] * 1;
+                        startIndex += count;
+                    }
+                }
+                if (sortArr[prop] > 1) {
+                    //console.log("进入subProj--此时开始index-"+startIndex+"--结束index--"+(startIndex+sortArr[prop])*1);
+                    mergeCells(datas, startIndex, startIndex + sortArr[prop], "phaseName", target)
+                } else {
+                    phaseCount += 1 + ",";
+                }
+            }
+        }
+    }
+</script>
+
+</html>
