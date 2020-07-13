@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>layui在线调试</title>
+    <link rel="stylesheet" href="css/layui.css">
+    <style>
+        body {
+            margin: 10px;
+        }
+
+        .demo-carousel {
+            height: 200px;
+            line-height: 200px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <table class="layui-hide" id="demo" lay-filter="test"></table>
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    </script>
+    <script type="text/html" id="barDemo1">
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+    </script>
+    <script src="./layui.all.js"></script>
+    <script>
+        layui.config({
+            version: '1545041465443' //为了更新 js 缓存，可忽略
+        });
+        layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element', 'slider'],
+            function () {
+                var table = layui.table //表格
+                //执行一个 table 实例
+                table.render({
+                    elem: '#demo',
+                    height: 670,
+                    title: '用户表',
+
+
+
+                    data: [{
+                        "id": 10000,
+                        "username": "user-0",
+                        "sex": "女",
+                        "city": "城市-0",
+                        "sign": "签名-0",
+                        "experience": 255,
+                        "logins": 24,
+                        "wealth": 82830700,
+                        "classify": "作家",
+                        "score": 57
+                    }, {
+                        "id": 10001,
+                        "username": "user-1",
+                        "sex": "男",
+                        "city": "城市-1",
+                        "sign": "签名-1",
+                        "experience": 884,
+                        "logins": 58,
+                        "wealth": 64928690,
+                        "classify": "词人",
+                        "score": 27
+                    }, {
+                        "id": 10002,
+                        "username": "user-2",
+                        "sex": "女",
+                        "city": "城市-2",
+                        "sign": "签名-2",
+                        "experience": 650,
+                        "logins": 77,
+                        "wealth": 6298078,
+                        "classify": "酱油",
+                        "score": 31
+                    }, {
+                        "id": 10003,
+                        "username": "user-3",
+                        "sex": "女",
+                        "city": "城市-3",
+                        "sign": "签名-3",
+                        "experience": 362,
+                        "logins": 157,
+                        "wealth": 37117017,
+                        "classify": "诗人",
+                        "score": 68
+                    }, {
+                        "id": 10004,
+                        "username": "user-4",
+                        "sex": "男",
+                        "city": "城市-4",
+                        "sign": "签名-4",
+                        "experience": 807,
+                        "logins": 51,
+                        "wealth": 76263262,
+                        "classify": "作家",
+                        "score": 6
+                    }, {
+                        "id": 10005,
+                        "username": "user-5",
+                        "sex": "女",
+                        "city": "城市-5",
+                        "sign": "签名-5",
+                        "experience": 173,
+                        "logins": 68,
+                        "wealth": 60344147,
+                        "classify": "作家",
+                        "score": 87
+                    }, {
+                        "id": 10006,
+                        "username": "user-6",
+                        "sex": "女",
+                        "city": "城市-6",
+                        "sign": "签名-6",
+                        "experience": 982,
+                        "logins": 37,
+                        "wealth": 57768166,
+                        "classify": "作家",
+                        "score": 34
+                    }, {
+                        "id": 10007,
+                        "username": "user-7",
+                        "sex": "男",
+                        "city": "城市-7",
+                        "sign": "签名-7",
+                        "experience": 727,
+                        "logins": 150,
+                        "wealth": 82030578,
+                        "classify": "作家",
+                        "score": 28
+                    }, {
+                        "id": 10008,
+                        "username": "user-8",
+                        "sex": "男",
+                        "city": "城市-8",
+                        "sign": "签名-8",
+                        "experience": 951,
+                        "logins": 133,
+                        "wealth": 16503371,
+                        "classify": "词人",
+                        "score": 14
+                    }, {
+                        "id": 10009,
+                        "username": "user-9",
+                        "sex": "女",
+                        "city": "城市-9",
+                        "sign": "签名-9",
+                        "experience": 484,
+                        "logins": 25,
+                        "wealth": 86801934,
+                        "classify": "词人",
+                        "score": 75
+                    }, {
+                        "id": 10010,
+                        "username": "user-10",
+                        "sex": "女",
+                        "city": "城市-10",
+                        "sign": "签名-10",
+                        "experience": 1016,
+                        "logins": 182,
+                        "wealth": 71294671,
+                        "classify": "诗人",
+                        "score": 34
+                    }, {
+                        "id": 10011,
+                        "username": "user-11",
+                        "sex": "女",
+                        "city": "城市-11",
+                        "sign": "签名-11",
+                        "experience": 492,
+                        "logins": 107,
+                        "wealth": 8062783,
+                        "classify": "诗人",
+                        "score": 6
+                    }, {
+                        "id": 10012,
+                        "username": "user-12",
+                        "sex": "女",
+                        "city": "城市-12",
+                        "sign": "签名-12",
+                        "experience": 106,
+                        "logins": 176,
+                        "wealth": 42622704,
+                        "classify": "词人",
+                        "score": 54
+                    }, {
+                        "id": 10013,
+                        "username": "user-13",
+                        "sex": "男",
+                        "city": "城市-13",
+                        "sign": "签名-13",
+                        "experience": 1047,
+                        "logins": 94,
+                        "wealth": 59508583,
+                        "classify": "诗人",
+                        "score": 63
+                    }, {
+                        "id": 10014,
+                        "username": "user-14",
+                        "sex": "男",
+                        "city": "城市-14",
+                        "sign": "签名-14",
+                        "experience": 873,
+                        "logins": 116,
+                        "wealth": 72549912,
+                        "classify": "词人",
+                        "score": 8
+                    }, {
+                        "id": 10015,
+                        "username": "user-15",
+                        "sex": "女",
+                        "city": "城市-15",
+                        "sign": "签名-15",
+                        "experience": 1068,
+                        "logins": 27,
+                        "wealth": 52737025,
+                        "classify": "作家",
+                        "score": 28
+                    }, {
+                        "id": 10016,
+                        "username": "user-16",
+                        "sex": "女",
+                        "city": "城市-16",
+                        "sign": "签名-16",
+                        "experience": 862,
+                        "logins": 168,
+                        "wealth": 37069775,
+                        "classify": "酱油",
+                        "score": 86
+                    }, {
+                        "id": 10017,
+                        "username": "user-17",
+                        "sex": "女",
+                        "city": "城市-17",
+                        "sign": "签名-17",
+                        "experience": 1060,
+                        "logins": 187,
+                        "wealth": 66099525,
+                        "classify": "作家",
+                        "score": 69
+                    }, {
+                        "id": 10018,
+                        "username": "user-18",
+                        "sex": "女",
+                        "city": "城市-18",
+                        "sign": "签名-18",
+                        "experience": 866,
+                        "logins": 88,
+                        "wealth": 81722326,
+                        "classify": "词人",
+                        "score": 74
+                    }, {
+                        "id": 10019,
+                        "username": "user-19",
+                        "sex": "女",
+                        "city": "城市-19",
+                        "sign": "签名-19",
+                        "experience": 682,
+                        "logins": 106,
+                        "wealth": 68647362,
+                        "classify": "词人",
+                        "score": 51
+                    }, {
+                        "id": 10020,
+                        "username": "user-20",
+                        "sex": "男",
+                        "city": "城市-20",
+                        "sign": "签名-20",
+                        "experience": 770,
+                        "logins": 24,
+                        "wealth": 92420248,
+                        "classify": "诗人",
+                        "score": 87
+                    }, {
+                        "id": 10021,
+                        "username": "user-21",
+                        "sex": "男",
+                        "city": "城市-21",
+                        "sign": "签名-21",
+                        "experience": 184,
+                        "logins": 131,
+                        "wealth": 71566045,
+                        "classify": "词人",
+                        "score": 99
+                    }, {
+                        "id": 10022,
+                        "username": "user-22",
+                        "sex": "男",
+                        "city": "城市-22",
+                        "sign": "签名-22",
+                        "experience": 739,
+                        "logins": 152,
+                        "wealth": 60907929,
+                        "classify": "作家",
+                        "score": 18
+                    }, {
+                        "id": 10023,
+                        "username": "user-23",
+                        "sex": "女",
+                        "city": "城市-23",
+                        "sign": "签名-23",
+                        "experience": 127,
+                        "logins": 82,
+                        "wealth": 14765943,
+                        "classify": "作家",
+                        "score": 30
+                    }, {
+                        "id": 10024,
+                        "username": "user-24",
+                        "sex": "女",
+                        "city": "城市-24",
+                        "sign": "签名-24",
+                        "experience": 212,
+                        "logins": 133,
+                        "wealth": 59011052,
+                        "classify": "词人",
+                        "score": 76
+                    }, {
+                        "id": 10025,
+                        "username": "user-25",
+                        "sex": "女",
+                        "city": "城市-25",
+                        "sign": "签名-25",
+                        "experience": 938,
+                        "logins": 182,
+                        "wealth": 91183097,
+                        "classify": "作家",
+                        "score": 69
+                    }, {
+                        "id": 10026,
+                        "username": "user-26",
+                        "sex": "男",
+                        "city": "城市-26",
+                        "sign": "签名-26",
+                        "experience": 978,
+                        "logins": 7,
+                        "wealth": 48008413,
+                        "classify": "作家",
+                        "score": 65
+                    }, {
+                        "id": 10027,
+                        "username": "user-27",
+                        "sex": "女",
+                        "city": "城市-27",
+                        "sign": "签名-27",
+                        "experience": 371,
+                        "logins": 44,
+                        "wealth": 64419691,
+                        "classify": "诗人",
+                        "score": 60
+                    }, {
+                        "id": 10028,
+                        "username": "user-28",
+                        "sex": "女",
+                        "city": "城市-28",
+                        "sign": "签名-28",
+                        "experience": 977,
+                        "logins": 21,
+                        "wealth": 75935022,
+                        "classify": "作家",
+                        "score": 37
+                    }, {
+                        "id": 10029,
+                        "username": "user-29",
+                        "sex": "男",
+                        "city": "城市-29",
+                        "sign": "签名-29",
+                        "experience": 647,
+                        "logins": 107,
+                        "wealth": 97450636,
+                        "classify": "酱油",
+                        "score": 27
+                    }] //数据接口
+                    ,
+
+
+                    page: true //开启分页
+                        ,
+                    cols: [
+                        [ //表头
+                            {
+                                type: 'checkbox',
+                                fixed: 'left'
+                            },
+                            {
+                                field: 'username',
+                                title: '用户名',
+                                Width: 280,
+                                event: 'collapse',
+                                templet: function (d) {
+                                    return '<div style="position: relative;\n' +
+                                        '    padding: 0 10px 0 20px;">' + d.username +
+                                        '<i style="left: 0px;" lay-tips="展开" class="layui-icon layui-colla-icon layui-icon-right"></i></div>'
+                                }
+                            },
+                            {
+                                field: 'experience',
+                                title: '积分',
+                                width: 290,
+                                sort: true
+                            },
+                            {
+                                field: 'sex',
+                                title: '性别',
+                                width: 280,
+                                sort: true
+                            },
+                            {
+                                field: 'score',
+                                title: '评分',
+                                width: 280,
+                                sort: true
+                            },
+                            {
+                                field: 'city',
+                                title: '城市',
+                                width: 250
+                            },
+                            {
+                                fixed: 'right',
+                                width: 280,
+                                align: 'center',
+                                toolbar: '#barDemo'
+                            }
+                        ]
+                    ]
+                });
+
+                //监听工具条
+                table.on('tool(test)',
+                    function (obj) {
+
+                        var data = obj.data;
+                        if (obj.event === 'collapse') {
+                            var trObj = layui.$(this).parent('tr'); //当前行
+                            var accordion = true //开启手风琴，那么在进行折叠操作时，始终只会展现当前展开的表格。
+                            var content = '<table></table>' //内容
+                            //表格行折叠方法
+                            collapseTable({
+                                elem: trObj,
+                                accordion: accordion,
+                                content: content,
+                                success: function (trObjChildren, index) { //成功回调函数
+                                    //trObjChildren 展开tr层DOM
+                                    //index 当前层索引
+                                    trObjChildren.find('table').attr("id", index);
+                                    table.render({
+                                        elem: "#" + index,
+                                        data: [{
+                        "id": 10000,
+                        "username": "user-0",
+                        "sex": "女",
+                        "city": "城市-0",
+                        "sign": "签名-0",
+                        "experience": 255,
+                        "logins": 24,
+                        "wealth": 82830700,
+                        "classify": "作家",
+                        "score": 57
+                    }, {
+                        "id": 10001,
+                        "username": "user-1",
+                        "sex": "男",
+                        "city": "城市-1",
+                        "sign": "签名-1",
+                        "experience": 884,
+                        "logins": 58,
+                        "wealth": 64928690,
+                        "classify": "词人",
+                        "score": 27
+                    }, {
+                        "id": 10002,
+                        "username": "user-2",
+                        "sex": "女",
+                        "city": "城市-2",
+                        "sign": "签名-2",
+                        "experience": 650,
+                        "logins": 77,
+                        "wealth": 6298078,
+                        "classify": "酱油",
+                        "score": 31
+                    }, {
+                        "id": 10003,
+                        "username": "user-3",
+                        "sex": "女",
+                        "city": "城市-3",
+                        "sign": "签名-3",
+                        "experience": 362,
+                        "logins": 157,
+                        "wealth": 37117017,
+                        "classify": "诗人",
+                        "score": 68
+                    }, {
+                        "id": 10004,
+                        "username": "user-4",
+                        "sex": "男",
+                        "city": "城市-4",
+                        "sign": "签名-4",
+                        "experience": 807,
+                        "logins": 51,
+                        "wealth": 76263262,
+                        "classify": "作家",
+                        "score": 6
+                    }, {
+                        "id": 10005,
+                        "username": "user-5",
+                        "sex": "女",
+                        "city": "城市-5",
+                        "sign": "签名-5",
+                        "experience": 173,
+                        "logins": 68,
+                        "wealth": 60344147,
+                        "classify": "作家",
+                        "score": 87
+                    }, {
+                        "id": 10006,
+                        "username": "user-6",
+                        "sex": "女",
+                        "city": "城市-6",
+                        "sign": "签名-6",
+                        "experience": 982,
+                        "logins": 37,
+                        "wealth": 57768166,
+                        "classify": "作家",
+                        "score": 34
+                    }, {
+                        "id": 10007,
+                        "username": "user-7",
+                        "sex": "男",
+                        "city": "城市-7",
+                        "sign": "签名-7",
+                        "experience": 727,
+                        "logins": 150,
+                        "wealth": 82030578,
+                        "classify": "作家",
+                        "score": 28
+                    }, {
+                        "id": 10008,
+                        "username": "user-8",
+                        "sex": "男",
+                        "city": "城市-8",
+                        "sign": "签名-8",
+                        "experience": 951,
+                        "logins": 133,
+                        "wealth": 16503371,
+                        "classify": "词人",
+                        "score": 14
+                    }, {
+                        "id": 10009,
+                        "username": "user-9",
+                        "sex": "女",
+                        "city": "城市-9",
+                        "sign": "签名-9",
+                        "experience": 484,
+                        "logins": 25,
+                        "wealth": 86801934,
+                        "classify": "词人",
+                        "score": 75
+                    }, {
+                        "id": 10010,
+                        "username": "user-10",
+                        "sex": "女",
+                        "city": "城市-10",
+                        "sign": "签名-10",
+                        "experience": 1016,
+                        "logins": 182,
+                        "wealth": 71294671,
+                        "classify": "诗人",
+                        "score": 34
+                    }, {
+                        "id": 10011,
+                        "username": "user-11",
+                        "sex": "女",
+                        "city": "城市-11",
+                        "sign": "签名-11",
+                        "experience": 492,
+                        "logins": 107,
+                        "wealth": 8062783,
+                        "classify": "诗人",
+                        "score": 6
+                    }, {
+                        "id": 10012,
+                        "username": "user-12",
+                        "sex": "女",
+                        "city": "城市-12",
+                        "sign": "签名-12",
+                        "experience": 106,
+                        "logins": 176,
+                        "wealth": 42622704,
+                        "classify": "词人",
+                        "score": 54
+                    }, {
+                        "id": 10013,
+                        "username": "user-13",
+                        "sex": "男",
+                        "city": "城市-13",
+                        "sign": "签名-13",
+                        "experience": 1047,
+                        "logins": 94,
+                        "wealth": 59508583,
+                        "classify": "诗人",
+                        "score": 63
+                    }, {
+                        "id": 10014,
+                        "username": "user-14",
+                        "sex": "男",
+                        "city": "城市-14",
+                        "sign": "签名-14",
+                        "experience": 873,
+                        "logins": 116,
+                        "wealth": 72549912,
+                        "classify": "词人",
+                        "score": 8
+                    }, {
+                        "id": 10015,
+                        "username": "user-15",
+                        "sex": "女",
+                        "city": "城市-15",
+                        "sign": "签名-15",
+                        "experience": 1068,
+                        "logins": 27,
+                        "wealth": 52737025,
+                        "classify": "作家",
+                        "score": 28
+                    }, {
+                        "id": 10016,
+                        "username": "user-16",
+                        "sex": "女",
+                        "city": "城市-16",
+                        "sign": "签名-16",
+                        "experience": 862,
+                        "logins": 168,
+                        "wealth": 37069775,
+                        "classify": "酱油",
+                        "score": 86
+                    }, {
+                        "id": 10017,
+                        "username": "user-17",
+                        "sex": "女",
+                        "city": "城市-17",
+                        "sign": "签名-17",
+                        "experience": 1060,
+                        "logins": 187,
+                        "wealth": 66099525,
+                        "classify": "作家",
+                        "score": 69
+                    }, {
+                        "id": 10018,
+                        "username": "user-18",
+                        "sex": "女",
+                        "city": "城市-18",
+                        "sign": "签名-18",
+                        "experience": 866,
+                        "logins": 88,
+                        "wealth": 81722326,
+                        "classify": "词人",
+                        "score": 74
+                    }, {
+                        "id": 10019,
+                        "username": "user-19",
+                        "sex": "女",
+                        "city": "城市-19",
+                        "sign": "签名-19",
+                        "experience": 682,
+                        "logins": 106,
+                        "wealth": 68647362,
+                        "classify": "词人",
+                        "score": 51
+                    }, {
+                        "id": 10020,
+                        "username": "user-20",
+                        "sex": "男",
+                        "city": "城市-20",
+                        "sign": "签名-20",
+                        "experience": 770,
+                        "logins": 24,
+                        "wealth": 92420248,
+                        "classify": "诗人",
+                        "score": 87
+                    }, {
+                        "id": 10021,
+                        "username": "user-21",
+                        "sex": "男",
+                        "city": "城市-21",
+                        "sign": "签名-21",
+                        "experience": 184,
+                        "logins": 131,
+                        "wealth": 71566045,
+                        "classify": "词人",
+                        "score": 99
+                    }, {
+                        "id": 10022,
+                        "username": "user-22",
+                        "sex": "男",
+                        "city": "城市-22",
+                        "sign": "签名-22",
+                        "experience": 739,
+                        "logins": 152,
+                        "wealth": 60907929,
+                        "classify": "作家",
+                        "score": 18
+                    }, {
+                        "id": 10023,
+                        "username": "user-23",
+                        "sex": "女",
+                        "city": "城市-23",
+                        "sign": "签名-23",
+                        "experience": 127,
+                        "logins": 82,
+                        "wealth": 14765943,
+                        "classify": "作家",
+                        "score": 30
+                    }, {
+                        "id": 10024,
+                        "username": "user-24",
+                        "sex": "女",
+                        "city": "城市-24",
+                        "sign": "签名-24",
+                        "experience": 212,
+                        "logins": 133,
+                        "wealth": 59011052,
+                        "classify": "词人",
+                        "score": 76
+                    }, {
+                        "id": 10025,
+                        "username": "user-25",
+                        "sex": "女",
+                        "city": "城市-25",
+                        "sign": "签名-25",
+                        "experience": 938,
+                        "logins": 182,
+                        "wealth": 91183097,
+                        "classify": "作家",
+                        "score": 69
+                    }, {
+                        "id": 10026,
+                        "username": "user-26",
+                        "sex": "男",
+                        "city": "城市-26",
+                        "sign": "签名-26",
+                        "experience": 978,
+                        "logins": 7,
+                        "wealth": 48008413,
+                        "classify": "作家",
+                        "score": 65
+                    }, {
+                        "id": 10027,
+                        "username": "user-27",
+                        "sex": "女",
+                        "city": "城市-27",
+                        "sign": "签名-27",
+                        "experience": 371,
+                        "logins": 44,
+                        "wealth": 64419691,
+                        "classify": "诗人",
+                        "score": 60
+                    }, {
+                        "id": 10028,
+                        "username": "user-28",
+                        "sex": "女",
+                        "city": "城市-28",
+                        "sign": "签名-28",
+                        "experience": 977,
+                        "logins": 21,
+                        "wealth": 75935022,
+                        "classify": "作家",
+                        "score": 37
+                    }, {
+                        "id": 10029,
+                        "username": "user-29",
+                        "sex": "男",
+                        "city": "城市-29",
+                        "sign": "签名-29",
+                        "experience": 647,
+                        "logins": 107,
+                        "wealth": 97450636,
+                        "classify": "酱油",
+                        "score": 27
+                    }] //数据接口
+                    ,
+
+                                        limit: 3,
+                                        cellMinWidth: 80,
+                                        cols: [
+                                            [{
+                                                    type: 'checkbox',
+                                                    fixed: 'left'
+                                                },
+                                                {
+                                                    field: 'id',
+                                                    width: 80,
+                                                    title: 'ID',
+                                                    sort: true
+                                                },
+                                                {
+                                                    field: 'username',
+                                                    title: '用户名'
+                                                },
+                                                {
+                                                    field: 'sex',
+                                                    title: '性别',
+                                                    sort: true
+                                                },
+                                                {
+                                                    field: 'city',
+                                                    title: '城市'
+                                                },
+                                                {
+                                                    fixed: 'right',
+                                                    width: 80,
+                                                    align: 'center',
+                                                    toolbar: '#barDemo1'
+                                                }
+                                            ]
+                                        ]
+                                    });
+
+                                }
+                            });
+
+                        }
+                    });
+
+                function collapseTable(options) {
+                    var trObj = options.elem;
+                    if (!trObj) return;
+                    var accordion = options.accordion,
+                        success = options.success,
+                        content = options.content || '';
+                    var tableView = trObj.parents('.layui-table-view'); //当前表格视图
+                    var id = tableView.attr('lay-id'); //当前表格标识
+                    var index = trObj.data('index'); //当前行索引
+                    var leftTr = tableView.find('.layui-table-fixed.layui-table-fixed-l tr[data-index="' + index +
+                        '"]'); //左侧当前固定行
+                    var rightTr = tableView.find('.layui-table-fixed.layui-table-fixed-r tr[data-index="' + index +
+                        '"]'); //右侧当前固定行
+                    var colspan = trObj.find('td').length; //获取合并长度
+                    var trObjChildren = trObj.next(); //展开行Dom
+                    var indexChildren = id + '-' + index + '-children'; //展开行索引
+                    var leftTrChildren = tableView.find('.layui-table-fixed.layui-table-fixed-l tr[data-index="' +
+                        indexChildren + '"]'); //左侧展开固定行
+                    var rightTrChildren = tableView.find('.layui-table-fixed.layui-table-fixed-r tr[data-index="' +
+                        indexChildren + '"]'); //右侧展开固定行
+                    var lw = leftTr.width() + 15; //左宽
+                    var rw = rightTr.width() + 15; //右宽
+                    //不存在就创建展开行
+                    if (trObjChildren.data('index') != indexChildren) {
+                        //装载HTML元素
+                        var tr = '<tr data-index="' + indexChildren + '"><td colspan="' + colspan +
+                            '"><div style="height: auto;padding-left:' + lw + 'px;padding-right:' + rw +
+                            'px" class="layui-table-cell">' + content + '</div></td></tr>';
+                        trObjChildren = trObj.after(tr).next().hide(); //隐藏展开行
+                        var fixTr = '<tr data-index="' + indexChildren + '"></tr>'; //固定行
+                        leftTrChildren = leftTr.after(fixTr).next().hide(); //左固定
+                        rightTrChildren = rightTr.after(fixTr).next().hide(); //右固定
+                    }
+                    //展开|折叠箭头图标
+                    trObj.find('td[lay-event="collapse"] i.layui-colla-icon').toggleClass(
+                        "layui-icon-right layui-icon-down");
+                    //显示|隐藏展开行
+                    trObjChildren.toggle();
+                    //开启手风琴折叠和折叠箭头
+                    if (accordion) {
+                        trObj.siblings().find('td[lay-event="collapse"] i.layui-colla-icon').removeClass(
+                            "layui-icon-down").addClass("layui-icon-right");
+                        trObjChildren.siblings('[data-index$="-children"]').hide(); //展开
+                        rightTrChildren.siblings('[data-index$="-children"]').hide(); //左固定
+                        leftTrChildren.siblings('[data-index$="-children"]').hide(); //右固定
+                    }
+                    success(trObjChildren, indexChildren); //回调函数
+                    heightChildren = trObjChildren.height(); //展开高度固定
+                    rightTrChildren.height(heightChildren + 115).toggle(); //左固定
+                    leftTrChildren.height(heightChildren + 115).toggle(); //右固定
+                }
+
+            });
+    </script>
+</body>
+
+</html>
