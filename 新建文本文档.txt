@@ -1,0 +1,173 @@
+相较于angularjs中的ng-translate, angular2也有适合自己的国际化模块，就是ngx-translate。
+项目地址：https://github.com/ngx-translate/core
+
+使用angular-cli初始化项目：
+ng new my-project
+使用npm安装ngx-translate模块
+npm install --save @ngx-translate/core
+npm install --save @ngx-translate/http-loader
+在项目的根模块app.module.ts中引入该模块
+
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+export function HttpLoaderFactory(http:Http){
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    ...
+    TranslateModule.forRoot({
+      loader:{
+        provide:TranslateLoader,
+        useFactory:HttpLoaderFactory,
+        deps:[Http]
+      }
+    }
+
+    )
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+在assets文件夹下新建i18n文件夹，并且新建两个语言的json文件。（比如zh-CN.json和en.json）
+
+json文件是key-value形式的，key值代表要翻译的字符串，value值为特定语言的翻译结果，不用语言的文件一般key值是相同的，只是value值不同。
+
+//zh-CN.json
+{
+    "welcome":"欢迎使用本应用",
+    "hello":"你好",
+    "get-lang":"获取语言类型"
+}
+
+//en.json
+{
+    "welcome":"welcome to this app",
+    "hello":"Hola"
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+然后在相应的组件中使用Translate服务
+
+import { TranslateService } from '@ngx-translate/core'
+@Component({
+  ...
+})
+export class AppComponent {
+  constructor(private translate: TranslateService) {
+    //添加语言支持
+    translate.addLangs(['zh-CN', 'en']);
+    //设置默认语言，一般在无法匹配的时候使用
+    translate.setDefaultLang('zh-CN');
+
+    //获取当前浏览器环境的语言比如en、 zh
+    let broswerLang = translate.getBrowserLang();
+    translate.use(broswerLang.match(/en|zh-CN/) ? broswerLang : 'zh-CN');
+  }
+
+  changeLang(lang) {
+    console.log(lang);
+    this.translate.use(lang);
+  }
+  toggleLang() {
+    console.log(this.translate.getBrowserLang());
+    //获取语言风格，相当于更详细的语言类型，比如zh-CN、zh-TW、en-US
+    console.log(this.translate.getBrowserCultureLang());
+  }
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+示例模板：
+
+<div>
+  <h2>{{ title | translate }}</h2>
+  <label>
+    {{ 'hello' | translate }}
+    <select #langSelect (change)="changeLang(langSelect.value)">
+      <option *ngFor="let lang of translate.getLangs()" [value]="lang" [selected]="lang === translate.currentLang">{{ lang }}</option>
+    </select>
+  </label>
+</div>
+<button (click)="toggleLang()">{{'get-lang' | translate}}</button>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+使用方式和angularjs中的ng-translate类似，使用translate管道。
+
+效果：
+
+
+源码地址：https://github.com/justforuse/angular2-demo/tree/master/angular-translate
+————————————————
+版权声明：本文为CSDN博主「justforuse」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/u014291497/article/details/61233033
