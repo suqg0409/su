@@ -1,0 +1,102 @@
+﻿/// <reference path="jquery.js" />
+
+
+$(document).ready(function () {
+
+    $("#keyword").keydown(function (e) {
+        var curKey = e.which;
+        if (curKey == 13) {
+            Search();
+            return false;
+        }
+    });
+
+
+    //setTimeout(function () {
+    //    $(".pagew").css("overflow-y", "auto");
+    //    $(".pagew").height($(window).height() - 80);
+    //}, 1);
+  
+
+});
+
+
+function Search()
+{
+    var keyword = trim($("#keyword").val());
+    if (keyword == "")
+    {
+        alert("Please enter the keyword");
+        return;
+    }
+    location.href = "/search?q=" + encodeURIComponent(keyword);
+}
+
+
+function trim(x) {
+    return x.replace(/^\s+|\s+$/gm,'');
+}
+
+
+function Login(form) {
+    
+    $.ajax({
+        type: "post",
+        url: "/ajax/login?rdx=" + Math.random(),
+        data: { rd: Math.random() },
+        datatype: "json",
+        success: function (res) {
+            if (res.IsSuss == false) {
+
+                if (res.Message.indexOf("http://") >= 0)
+                {
+                    location.href = res.Message;
+                    return;
+                }
+
+                setTimeout(function(){Login(form)}, 1500);
+
+                return;
+            }
+           
+            if (form == "0")
+            {
+                location.href = "/";
+            }
+            else {
+                location.href = form;
+            }
+        },
+        error: function () {
+
+        }
+    });
+}
+   
+ 
+if (!Array.prototype.forEach) {
+    Array.prototype.forEach = function forEach(callback, thisArg) {
+        var T, k;
+        if (this == null) {
+            throw new TypeError("this is null or not defined");
+        }
+        var O = Object(this);
+        var len = O.length >>> 0;
+        if (typeof callback !== "function") {
+            throw new TypeError(callback + " is not a function");
+        }
+        if (arguments.length > 1) {
+            T = thisArg;
+        }
+        k = 0;
+        while (k < len) {
+
+            var kValue;
+            if (k in O) {
+                kValue = O[k];
+                callback.call(T, kValue, k, O);
+            }
+            k++;
+        }
+    };
+}
